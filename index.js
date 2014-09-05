@@ -55,12 +55,13 @@ function Game(opts) {
   opts.height = opts.height || 240;
   opts.center = opts.center || true;
   opts.scale = opts.scale || 'fit';
-  this.fb = new pb.Stage(opts);
+  var fb = new pb.Stage(opts);
+
   this.width = opts.width;
   this.height = opts.height;
 
   // Core RGB palette.
-  this.palette = [
+  var palette = [
     pb.rgb(0, 0, 0),
     pb.rgb(0, 100, 100),
     pb.rgb(0, 180, 180),
@@ -70,7 +71,7 @@ function Game(opts) {
   ];
 
   // Sprite palette.
-  this.spritePalette = [
+  var spritePalette = [
     0,
     1,
     2,
@@ -80,37 +81,36 @@ function Game(opts) {
   ];
 
   // Table of all sprite/bg graphics.
-  // 8x8
-  this.patternTable = [];
+  var patternTable = [];
 
   // Sprites to render.
-  this.sprites = [];
+  var sprites = [];
 
 
 
   this.setPattern = function(idx, pat) {
-    this.patternTable[idx] = pat;
+    patternTable[idx] = pat;
   };
 
   this.addSprite = function(spr) {
-    this.sprites.push(spr);
+    sprites.push(spr);
     return spr;
   };
 
   this.render = function() {
-    this.fb.clear(this.palette[0]);
+    fb.clear(palette[0]);
 
-    for (var idx in this.sprites) {
-      var sprite = this.sprites[idx];
-      var pattern = this.patternTable[sprite.pattern];
+    for (var idx in sprites) {
+      var sprite = sprites[idx];
+      var pattern = patternTable[sprite.pattern];
       for (var i=0; i < pattern[0].length; i++) {
         for (var j=0; j < pattern.length; j++) {
-          var rgb = this.palette[this.spritePalette[sprite.palette[pattern[j][i]]]];
-          this.fb.setPixel(sprite.x+i, sprite.y+j, rgb);
+          var rgb = palette[spritePalette[sprite.palette[pattern[j][i]]]];
+          fb.setPixel(sprite.x+i, sprite.y+j, rgb);
         }
       }
     }
 
-    this.fb.render();
+    fb.render();
   };
 };
